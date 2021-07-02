@@ -150,3 +150,158 @@ hoist();
 console.log("A: ",a) // Global, is initilied
 
 ```
+### Let
+Let có phạm vi hoạt động là block scope.
+
+```javascript
+console.log("Variable: ", variable);
+let variable = "This is a variable"
+```
+
+Kết quả:
+
+```bash
+p@nt:~/tt$ node test.js
+/home/p/tt/test.js:1
+console.log("Variable: ", variable);
+                          ^
+
+ReferenceError: Cannot access 'variable' before initialization
+    at Object.<anonymous> (/home/p/tt/test.js:1:27)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)
+    at internal/main/run_main_module.js:17:47
+
+```
+
+```javascript
+let varibale;
+console.log("Variable: ", variable);
+variable = "This a variable"
+```
+
+Kết quả:
+
+```bash
+p@nt:~/tt$ node test.js
+Variable:  undefined
+```
+
+### Const
+Const keywork được giới thiệu ở ES6, cho phép biến không thay đổi được(immutable). Biến không thể thay đổi sau một lần assign. Lúc khai báo cần có giá trị khởi tạo
+
+```javascript
+const variable;
+variable = "This is variable";
+console.log("Variable: ",variable);
+```
+
+Kết quả: 
+```bash
+p@nt:~/tt$ node test.js
+/home/p/tt/test.js:1
+const variable;
+      ^^^^^^^^
+
+SyntaxError: Missing initializer in const declaration
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)
+    at internal/main/run_main_module.js:17:47
+```
+
+Hoisting không áp dụng cho let và const.
+
+### Hoisting function
+
+#### Function declarations
+
+```javascript
+hoised();
+
+function hoised() {
+  console.log("This is hoisting function");
+}
+```
+Kết quả
+
+
+```bash
+p@nt:~/tt$ node test.js
+This is hoisting function
+Kết quả:
+```
+Cũng giống như hoisting variable, hoisting function khai báo function trên top scope. Từ đây có thể hiểu tại sao function có thể được gọi trước khi khai báo trong Javascript
+
+```javascript
+hoised();
+var hoised = () => { console.log("Thí is hoisting function") }
+```
+
+Kết quả: 
+
+```bash
+p@nt:~/tt$ node test.js
+/home/p/tt/test.js:1
+hoised();
+^
+
+ReferenceError: Cannot access 'hoised' before initialization
+    at Object.<anonymous> (/home/p/tt/test.js:1:1)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:72:12)
+    at internal/main/run_main_module.js:17:47
+```
+
+Expression function thì không có cơ chế hoisting, cần phải khai báo trước khi thực thi.
+
+#### Order the of precedence
+
+##### Varibale assignment over function declaration
+
+```javascript
+var number = 22;
+
+function number() {
+  return 123;
+}
+
+console.log("Type of number: ", typeof number);
+``` 
+
+Kết quả:
+
+```bash
+p@nt:~/tt$ node test.js
+Type of number:  number
+```
+
+##### Function declaration over variable declaration
+
+```javascript
+function number() {
+  return 123;
+}
+var number;
+console.log("Type of number: ", typeof number);
+number = 22;
+```
+
+Kết quả:
+
+```bash
+p@nt:~/tt$ node test.js
+Type of number:  function
+```
+
+
+##### Author: @phatkhongbug.
