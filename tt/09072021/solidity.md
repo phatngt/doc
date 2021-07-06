@@ -1,4 +1,4 @@
-# Solidity Tour (Part 1)
+# [Solidity Tour](https://docs.soliditylang.org/en/v0.8.6/) (Part 1)
 
 ## Introdution
 
@@ -14,7 +14,7 @@ Solidity dùng để tạo những smart contract có chức năng như voting, 
 
 Source files có thể chứa nhiều định nghĩa contract, source imports, pragma directive và các định nghĩa cấu trúc, enum, function, error, và constant variable.
 
-### 1.Pragmas
+### 1.Pragma
 
 **_pragma_** là một keyword dùng để cho phép duy nhất một version compiler. Mỗi file chỉ có một pragma, vì vậy, cần phải add pragma đến tất cả file trong source để không bị lỗi nếu muốn compile. Import file không có nghĩ là file được import có thể lấy pragma của file chứa nó để nó compile được.
 
