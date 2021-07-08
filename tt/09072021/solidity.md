@@ -46,29 +46,35 @@ Source files có thể chứa nhiều định nghĩa contract, source imports, p
         constructor(){}
     }
 ```
+
 Đoạn code trong file _Hello.sol_ có import smart contract _World.sol_. Code trong _World.sol_ không có **_pragma_** để chỉ ra version compiler. Tuy _World.sol_ được import trong môi trường có **_pragma_**, nhưng không thể sử dụng version compiler trong môi trường nó được gọi. Bắt buộc bản thân nó phải khai báo một **_pragam_** cho riêng mình.
 
 Ngoải ra còn có [ABI Coder Pragma](https://docs.soliditylang.org/en/v0.8.6/layout-of-source-files.html#abi-coder-pragma) và [Experimental Pragma](https://docs.soliditylang.org/en/v0.8.6/layout-of-source-files.html#experimental-pragma)
+
 ### [2.Import orther Source Files](https://docs.soliditylang.org/en/v0.8.6/layout-of-source-files.html#importing-other-source-files)
+
 #### 2.1 Syntax and Semantics
 
 Solidity hổ trợ import statments để giúp module hóa project. Một project có thể có nhiều contract, và các contract có thể tương tác, sử dụng lẫn nhau. Import statement giúp dễ dàng gọi các smart contract cả bên trong lẫn bên ngoài project. Tuy nhiên, solidity không hổ trợ khái niệm default export.
 
 Tại level global, có thể dùng import statement như sau:
+
 ```solidity
     import "filename";
 ```
-<span style="color:red"> _filename_</span> : Đường dẫn của file smart contract cần import.
 
+<span style="color:red"> _filename_</span> : Đường dẫn của file smart contract cần import.
 
 Statement trên sẽ import tất cả symbol global(các import trong "**filename**") từ "**filename**" vào trong smart contract call import statement với scope hiện tại là global. Theo doc thì form này không được welcome, vì nó có thể gây ra những lộn xôn trong namespace mà không đoán trước được (các import trong file được import có thấy conflic với file hiện tại). Để tốt hơn thì nên import và chỉ rõ ra symbol tên là gì, cần phải alias cho nó:
 
 ```solidity
     import * as symbolName from "filename";
 ```
+
 Từ đấy dễ dàng gọi các symbol khác (global scope) bằng format <span style="color:red">symbolName.symbol </span>
 
 Một format khác để import một moldule, kết quả giống với format bên trên:
+
 ```solidity
 import "filename" as symbolName;
 ```
@@ -78,19 +84,22 @@ Nếu tên symbol bị đụng độ, có thể đổi tên trong khi import. V�
 ```solidity
 import {symbol1 as symbolName1, symbol2 as symbolName2 } from "filename"
 ```
- ### [3.Comments](https://docs.soliditylang.org/en/v0.8.6/layout-of-source-files.html#comments)
 
- Single line comment (<span style="color:red"> // </span>) và multi-line comments(<span style="color:red"> /*...*/ </span>).
- ```solidity
+### [3.Comments](https://docs.soliditylang.org/en/v0.8.6/layout-of-source-files.html#comments)
+
+Single line comment (<span style="color:red"> // </span>) và multi-line comments(<span style="color:red"> /_..._/ </span>).
+
+```solidity
 //This is single line comment
 /*
 This is multi-line comment.
 */
- ```
- Ngoài ra Solidity cũng cung cấp một loại comment khác là [NetSpec(Ethereum Natural Language Specification Format)](https://docs.soliditylang.org/en/v0.5.10/natspec-format.html) comment. Comment này cung cấp một rich document cho một function: name arguments, type return variable,... NatSpec commnet dùng <span style="color:red"> /**...*/</span> hoặc  <span style="color:red"> /// </span>.
+```
 
- ```solidity
-    /**
+Ngoài ra Solidity cũng cung cấp một loại comment khác là [NetSpec(Ethereum Natural Language Specification Format)](https://docs.soliditylang.org/en/v0.5.10/natspec-format.html) comment. Comment này cung cấp một rich document cho một function: name arguments, type return variable,... NatSpec commnet dùng <span style="color:red"> /\*_..._/</span> hoặc <span style="color:red"> /// </span>.
+
+```solidity
+   /**
 * @dev Move `amount` tokens from the caller's account ro recipient
 * Here, you provide the address you want to send and the amount to transfer
 * @param _to The address of the recipient
@@ -101,23 +110,60 @@ This is multi-line comment.
 *
 **/
 function transfer(address _to, uint256 _value) external returns (bool);
- ```
- ```solidity
- /**
-    ///@dev Move `amount` tokens from the caller's account ro recipient
-    ///Here, you provide the address you want to send and the amount to transfer
-    ///@param _to The address of the recipient
-    ///@param _value The amount tokens to be transferred
-    ///@return Whether the transfer was successful or not
-    ///Emits a {Transfer} event.
-    function transfer(address _to, uint256 _value) external returns (bool);
- ```
+```
 
-## Smart Contract Overview
+```solidity
+   ///@dev Move `amount` tokens from the caller's account ro recipient
+   ///Here, you provide the address you want to send and the amount to transfer
+   ///@param _to The address of the recipient
+   ///@param _value The amount tokens to be transferred
+   ///@return Whether the transfer was successful or not
+   ///Emits a {Transfer} event.
+   function transfer(address _to, uint256 _value) external returns (bool);
+```
 
-### 1.State Variables
+## [Smart Contract Overview](https://docs.soliditylang.org/en/v0.8.6/structure-of-a-contract.html)
 
-### 2.Functions
+Chapter này sẽ giới thiệu cơ bản về cấu trúc smartcontract những gì có thể có. Ở đây không đi sâu vào concept, chapter này chỉ giới thiệu cách sử dụng và chức năng của nó. Solidity Tour Part 2 sẽ giới thiệu chi tiết về Contract và nội dung chỉ xoay quanh nó.
+
+Contract trong Solidity tương tự như class trong ngôn ngữ hướng đối tượng khác (object-oriented languages). Mỗi contract sẽ có thể có: State Variables, Functions, Function Modifiers, Events,
+Errors, Struct Types, Enum Types
+
+Ngoài ra cũng có các loại contract khác như [librarys](https://docs.soliditylang.org/en/v0.8.6/contracts.html#libraries) or [interfaces](https://docs.soliditylang.org/en/v0.8.6/contracts.html#interfaces). Sẽ được giới thiệu ở part 2.
+
+### [1.State Variables](https://docs.soliditylang.org/en/v0.8.6/structure-of-a-contract.html#state-variables)
+
+Giá trị của state variables(Biến trạng thái) đươc cho lifecircle bằng bằng lifecircle của contract chứa nó.
+
+```solidity
+pragma solidity ^0.6.12;
+contract SmartContract {
+    uint256 public count; //State variable
+}
+```
+
+### [2.Functions](https://docs.soliditylang.org/en/v0.8.6/structure-of-a-contract.html#functions)
+
+Function ở solidity cũng giống như function ở các ngôn ngữ khác. Ở solidity định nghĩa function là một đơn vị thực thi trong contract. Chúng có thể được defined lẫn bên trong và bên ngoài contract.
+
+```solidity
+pragma solidity ^0.6.12;
+contract SmartContract {
+    uint256 public count;
+
+    //Function is defined inside contract
+    function getCount() public returns (uint256){
+        return count;
+    }
+}
+
+//Helper function is defined outside of a contract
+function add(uint256 a, uint256 b) pure returns (uint256){
+    return a + b;
+}
+```
+
+Lời gọi hàm (Function Calls) có thể xảy ra ở bên trong hoặc bên ngoài và có nhiều level trong scope ở nhiều contract khác nhau. Nói đơn giản thì function calls có thể thực hiện trong chính contract định nghĩa nó, hoặc có thể gọi từ contract khác nếu contract định nghĩa function được import. Function calls có thể gọi ở nhiều scope miễn là nơi gọi có thể thấy được phạm vi của function.
 
 ### 3.Function Modifiers
 
