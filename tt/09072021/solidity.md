@@ -167,13 +167,103 @@ Lời gọi hàm (Function Calls) có thể xảy ra ở bên trong hoặc bên 
 
 ### 3.Function Modifiers
 
+Function Modifiers(Hàm chỉnh sửa ??) là công cụ để chỉnh sửa các hàm bằng cách khai báo. Đễ dễ hiểu, function modifiers giống như một format header cho nhiều hàm khác nhau, những function thường có thể chỉnh sửa từ function modifiers.
+
+```solidity
+pragma solidity ^0.6.12;
+contract SC{
+    address private owner;
+    modifier onlyOwner(){
+        require(msg.sender == owner, "Only owner can call this");
+        _;
+    }
+
+    function mint(uint256 _amount) public onlyOwner returns (bool) {
+        //...
+    }
+}
+```
+
 ### 4.Events
+
+Để đơn giản, events được xem như log ở những ngôn ngữ khác, khi một event được emit, EVM sẽ log event đó lại và lưu vào trong block.
+
+```solidity
+pragma solidity ^0.6.12;
+contract ERC20 {
+    event Approval(address index owner, address index spender, uint256 amount);
+
+    function approve(address spender, uint256 amount){
+        //...
+        emit Approal(mgs.sender, spender, amount); //Trigger event
+    }
+}
+```
 
 ### 5.Errors
 
+Error cho phép định nghĩa các mô tả cho names và data trong các tình huống failure. Error có thể được sử dụng trong [revert statements](https://docs.soliditylang.org/en/v0.8.6/control-structures.html#revert-statement) hoặc dùng _require_ function . So với việc kiểm tra lỗi bằng cách dùng string để so sánh, error dễ sử dụng và chi phí rẻ hơn nhiều. Có thể dùng NatSpec để mô tả lỗi cho người dùng.
+
+```solidity
+pragma solidity ^0.8.4;
+
+/// Not enough funds for transfer. Requested `requested`,
+/// but only `available` available.
+error NotEnoughFunds(uint requested, uint available);
+
+contract Token {
+    mapping(address => uint) balances;
+    function transfer(address to, uint amount) public {
+        uint balance = balances[msg.sender];
+        if (balance < amount)
+            revert NotEnoughFunds(amount, balance);
+        balances[msg.sender] -= amount;
+        balances[to] += amount;
+        // ...
+    }
+}
+```
+
+```solidity
+pragma solidity ^0.8.4;
+
+contract Token {
+    mapping(address => uint) balances;
+    function transfer(address to, uint amount) public {
+        uint balance = balances[msg.sender];
+        require(balance >= amount, "Not Enough Funds")
+        balances[msg.sender] -= amount;
+        balances[to] += amount;
+        // ...
+    }
+}
+```
+
 ### 6.Struct Types
 
+Structs là type được người dùng định nghĩa. Struct type có thể nhóm nhiều biến lại với nhau ([Strucs](https://docs.soliditylang.org/en/v0.8.6/types.html#structs) in type sections.)
+
+```solidity
+pragma solidity >=0.4.0 <0.9.0;
+contract MasterChef{
+    struct UserInfo {   //Struct type
+        uint256 amount;
+        uint256 rewardDebt;
+    }
+}
+```
+
 ### 7.Enum Types
+
+Cũng giống như enum ở các ngôn ngữ khác. Enum type trong solidity là tập hợp hữu hạn constant values được định nghĩa trong một enum. ([Enums](https://docs.soliditylang.org/en/v0.8.6/types.html#enums) in type sections.)
+
+```solidity
+pragma solidity >=0.4.0 <0.9.0;
+
+contract Purchase {
+    enum State { Created, Locked, Inactive } // Enum
+}
+```
 
 ## Types
 
