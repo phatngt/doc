@@ -264,10 +264,45 @@ contract Purchase {
     enum State { Created, Locked, Inactive } // Enum
 }
 ```
-
 ## Types
+Solidity là ngôn ngữ có kiểu static(tĩnh), mỗi biến(global or local) khi khai báo cần phải có một kiểu được chỉ rõ. Kiểu trong solidity bao gồm kiểu phần tử(level đơn vị) và kiểu phức tạp(bao gồm nhiều kiểu combined lại).
 
+Ngoài ra, type cũng có thể tương tác với những biểu thức có chưa toán tử khác nhau.
+
+Khái niệm _"undefined"_ or _"null"_ không tồn tại trong Solidity, nhưng mỗi kiểu sẽ có một giá trị mặc định khi khai báo. Để xử lý những giá trị không mong muốn, có thể dùng _revert_ function.
 ### 1.Value types
+#### 1.1 Booleans
+Kiểu luận lý, có 2 giá trị **true** or **false**.
+
+**Operator**:
+
+```js
+! : negation.
+
+&&: conjunction, "and".
+
+||: disjunction, "or".
+
+==: equality.
+
+!=: inequality.
+```
+
+#### 1.2 Integers
+
+<span style="color:red"> int</span> /<span style="color:red"> uint</span>:
+Là kiểu integer có dấu và không dấu. Kiểu integer có nhiều size: <span style="color:red"> int8</span>, <span style="color:red"> int16</span>,
+<span style="color:red"> uint256</span>.
+
+**Operator**:
+```python
+Comparations: <=, <, ==, >=, >. (evalutate to bool).
+Bit operators: &(and),|(or), ^(bitwisr exclusive or - xor), ~(bitwise negation).
+...
+```
+[Reference](https://docs.soliditylang.org/en/v0.8.6/types.html#integers)
+
+**Math operations**:
 
 ### 2.Reference Types
 
