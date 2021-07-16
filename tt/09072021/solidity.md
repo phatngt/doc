@@ -460,6 +460,7 @@ contract Demo {
 ```
 
 Result:
+
 ![Image result ](https://github.com/phatngt/doc/blob/main/tt/09072021/images/internal_result.png)
 
 
