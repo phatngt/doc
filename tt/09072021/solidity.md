@@ -404,8 +404,10 @@ contract MasterChef{
 Lưu ý: Gas sử  dụng cho Storage lớn hơn rất nhiều so với gas sử dụng Memory. Do đó, nên sử dụng memory để tính toán, cuối cùng lưu trữ kết quả cuối cùng trong Storage.
 
 1.Biến trạng thái(State variables), biến cục bộ (Local Variable) của struct, mảng mặc định luôn được lưu trữ trong storage.
+
 2.Function arguments là memory.
-3. Khi create một instance mới của một mảng bằng keyword 'memory',một bảng coppy của mảng đó được tạo ra. Khi thay đổi giá trị trên instance mới, thì không ảnh hưởng đến giá trị của instance gôc.
+
+3.Khi create một instance mới của một mảng bằng keyword 'memory',một bảng coppy của mảng đó được tạo ra. Khi thay đổi giá trị trên instance mới, thì không ảnh hưởng đến giá trị của instance gôc.
 
 Khi sử dụng một reference types(structs, arrays or mapping). Phải luôn cung cấp  rõ ràng vùng dữ liệu nơi mà chúng được lưu trữ:
 *memory: Thời gian sống(lưu trữ) giới hạn bởi 1 lần gọi hàm.
@@ -420,8 +422,46 @@ Giải thích: Phiên bản 0.5.0 trở về sau có thể string, byte cũng l�
 **private**: chỉ duy nhất contract tạo nó mới có thể truy cập được variable, function private.
 
 **external**: chỉ có thể access từ contract bên ngoài, không thể truy cập bên trong.
+```solidity
+pragma solidity 0.6.12;
+
+contract Demo   {
+
+
+      function getBlockTimestamp() external returns (uint256) {
+        return block.timestamp;
+    }
+
+    function callBlockTimestamp() public view returns (uint256){
+        uint256 timestamp = getBlockTimestamp();
+        return timestamp;
+    }
+}
+```
+
+Result:
+
+```bash
+contracts/Test.sol:11:29: DeclarationError: Undeclared identifier. "getBlockTimestamp" is not (or not yet)
+visible at this point. uint256 timestamp = getBlockTimestamp(); ^---------------^
+```
 
 **internal**: chỉ có thể access từ this contract và deriving contract. internal là default keywork của function.
+```solidity
+pragma solidity 0.6.12;
+
+contract Demo {
+
+    function getBlockTimestamp() internal view returns (uint256) {
+        return block.timestamp;
+    }
+
+}
+```
+
+Result:
+![alt](https://github.com/phatngt/doc/tree/main/tt/09072021/09072021/images/internal_result.png)
+
 
 **view**: function có thể được view từ bên ngoài, có thể convert thành **non-payable** function.
 
