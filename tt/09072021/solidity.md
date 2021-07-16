@@ -264,7 +264,7 @@ contract Purchase {
     enum State { Created, Locked, Inactive } // Enum
 }
 ```
-## Types
+<!-- ## Types
 Solidity là ngôn ngữ có kiểu static(tĩnh), mỗi biến(global or local) khi khai báo cần phải có một kiểu được chỉ rõ. Kiểu trong solidity bao gồm kiểu phần tử(level đơn vị) và kiểu phức tạp(bao gồm nhiều kiểu combined lại).
 
 Ngoài ra, type cũng có thể tương tác với những biểu thức có chưa toán tử khác nhau.
@@ -294,7 +294,7 @@ Kiểu luận lý, có 2 giá trị **true** or **false**.
 Là kiểu integer có dấu và không dấu. Kiểu integer có nhiều size: <span style="color:red"> int8</span>, <span style="color:red"> int16</span>,
 <span style="color:red"> uint256</span>.
 
-**Operator**:
+##### **Operator**:
 ```python
 Comparations: <=, <, ==, >=, >. (evalutate to bool).
 Bit operators: &(and),|(or), ^(bitwisr exclusive or - xor), ~(bitwise negation).
@@ -302,7 +302,29 @@ Bit operators: &(and),|(or), ^(bitwisr exclusive or - xor), ~(bitwise negation).
 ```
 [Reference](https://docs.soliditylang.org/en/v0.8.6/types.html#integers)
 
-**Math operations**:
+##### **Math operations**:
+- [Comparisons](https://docs.soliditylang.org/en/v0.8.6/types.html#comparisons)
+- [Bit operations](https://docs.soliditylang.org/en/v0.8.6/types.html#bit-operations): ~int256(0) == int256(-1)
+- [Shifts](https://docs.soliditylang.org/en/v0.8.6/types.html#shifts): x << y == x * 2\*\*y, x >> y == x / 2\*\*y
+- [Addition, Subtraction and Multiplication](https://docs.soliditylang.org/en/v0.8.6/types.html#addition-subtraction-and-multiplication): -x == (T(0)-x): T type of x.
+- [Division](https://docs.soliditylang.org/en/v0.8.6/types.html#division): Division rounds towards zero.
+- [Modulo](https://docs.soliditylang.org/en/v0.8.6/types.html#modulo): int256(5) % int256(2) == int256(1) ; int256(5) % int256(-2) == int256(1) ; int256(-5) % int256(2) == int256(-1) ; int256(-5) % int256(-2) == int256(-1);
+- [Exponentiation](https://docs.soliditylang.org/en/v0.8.6/types.html#exponentiation): x\*\*3 == x\*x\*x ;
+0\*\*0 == 1;
+
+#### [1.3 Fixed Poit Numbers](https://docs.soliditylang.org/en/v0.8.6/types.html#fixed-point-numbers)
+Fixed Point Numbers vẫn chưa hổ trợ đầy đủ cho Solidity.
+#### [1.4 Address](https://docs.soliditylang.org/en/v0.8.6/types.html#address).
+
+Kiểu address có 2 loại:
+
+- <span style="color:red"> address</span>.: Được chứa trong 20 bytes(size of an ETH address)
+- <span style="color:red"> address payable</span>.: Giống như <span style="color:red"> address</span>., ngoài ra có thêm 2 members <span style="color:red"> transfer</span>. và <span style="color:red"> send</span>.
+
+<span style="color:red"> address payable</span> có thể send Ether, còn <span style="color:red"> address </span> thì không.
+
+Có thể conversions from <span style="color:red"> address payable</span> to <span style="color:red"> address</span>, còn conversions from <span style="color:red"> address</span> to <span style="color:red"> address payable</span> phải thông qua <span style="color:red"> payable (\<address\>)</span>.
+
 
 ### 2.Reference Types
 
@@ -312,4 +334,105 @@ Bit operators: &(and),|(or), ^(bitwisr exclusive or - xor), ~(bitwise negation).
 
 ### 5.Conversions between Elementary Types
 
-### 6.Conversion between Literals and Elementary Types
+### 6.Conversion between Literals and Elementary Types -->
+
+## Solidity for MasterChef Smart Contract.
+### Giới thiệu MasterChef
+**MasterChef**, có vai trò như tên gọi của nó, vua đầu bếp trên nền tàng **Ethereum**. Tưởng tượng **DeFi** project có một quầy bar cao cấp, có một **MasterChef** trình độ 3 sao michelin, đối diện ông ta là một cái bàn vòng, được chia ra nhiều khu vực, mỗi khu vực có 1 màu riêng biệt (**Pool**) nơi các **Staker** có thể ngồi và thưởng thức **Reward Token**. Chỉ cần các S*taker chọn một màu (**Pool**) và ngồi xuống,chấp nhận(**Approve**) cho **MasterChef** thò tay vào túi quần và  lấy ra Token (**stake**) có màu tương ứng(**Stake Token**), bỏ lên bàn, nơi **MasterChef** có thể thấy được (**MasterChef giữ staked token**). Qua tháng năm,
+các **Staker** sẽ được **MasterChef** phục vụ đồ ăn, đồ uống (Reward Token) liên tục miễn là có Token đã staked đến khi quầy bar đóng cửa(**Seed phase already completed**). Khi quầy bar đóng cửa, các **Staker** có thể lấy lại các Token mình đã bỏ ra(**withdraw**). À ngoài ra các **Staker** có thể chi thêm Token(**stake**) hoặc rút ra(**withdraw**) trong thời gian quầy bar hoạt động, mà nhớ phải ăn uống(**nhận Reward Token trong thời gian seeding pool**) trước khi stake hoặc withdraw nha.
+
+### Những thứ cần có để tạo MasterChef Smart Contract.
+#### Cấu trúc của Smart Contract.
+Smart Contract như một class của các ngôn ngữ hướng đối tượng khác, thay keyword class bằng contract. Trong file cần khai báo version compile, và tạo một Contract với tên MasterChef.
+```solidity
+pragma solidity 0.6.12;
+contract MasterChef{
+    //...
+}
+```
+#### Các biến cơ bản cần có.
+ **uint256**: Biến integer có size 256 bit, range 0 <= x <= 2\*\*256 - 1. Dùng để lưu trữ Token value của user, các loại block, các biến tạm để thực hiện tính toán cho reward,...
+
+ **string**: String trong Solidity cần phải khai báo keyword **memory** để chỉ định giá trị của biến string đó được lưu trong bộ nhớ tạm(~RAM). Trong MasterChef hiện tại chưa thấy sử dụng, nhưng có sử dụng trong Token SmartContract để tạo tham số **name** và **symbol** trong function **constructor**.
+
+ **bool**: Như các ngôn ngữ khác, chỉ lưu 2 giá trị **true** và **false**.
+
+ **address**: Dùng để lưu trữ địa chỉ của Token, User, Wallet,... Các giá trị địa chỉ được lưu trữ dưới dạng hexa,có độ dài mặc định 20 bits.
+
+ **address payable**: Giống như **address** ở trên, ngoài ra có thêm 2 member(method??) là send và transfer.
+
+**mapping**: Biến này sử dụng khá nhiều trong hầu hết các SmartContract, giống như tên gọi của nó, biến này thực hiện map một input x -> trả về một output y. Giống như object type trong các ngôn ngữ khác.
+
+```solidity
+contract MasterChef{
+    mapping(address=>uint256) _balance;
+    //Example: _balance giữ 1 giá trị 0x949188c22D801A011486501a1496e8272B2B0Ca8 => 2830000000000000000000
+    function balanceOf(address owner) public view return (uint256){
+        //owner =  0x949188c22D801A011486501a1496e8272B2B0Ca8
+        return balance[owner]; //Return  2830000000000000000000
+    }
+}
+```
+
+**struct**: Giống như struct trong C, biến có kiểu này sẽ giữ thêm nhiều giá trị có kiểu có thể khác nhau bên trong nó. Vì struct là reference type, để lưu trữ giá trị có kiểu struct vào một biến, biến đó cần được khai báo có thêm keyword **storage** để biến đó lưu trữ dưới harddisk Để dễ hình dùng hãy xem đoạn code bên dứoi.
+
+```solidity
+contract MasterChef{
+    struct UserInfo {
+        address userAddress,
+        uint256 amount,
+        uint256 rewardDebt
+    }
+
+    mapping(uint8=> mapping(address => UserInfo) public userInfo;
+
+    function getUserInfo(uint8 _pid, address _user) public view returns (UserInfo){
+        UserInfo storage user = userInfo[_pid][_user]
+        return user;
+    }
+}
+```
+
+**array**: Giống như **struct** và **Data location**, cũng là reference type. Array có fixed size, size là k , kiêu là T => T[k] và dynamic size => T[]. Ngoài ra, có thể cấp phát bộ nhớ trong quá trình thực thi bằng keyword **new**. Array Literal, Array Members,
+[More details](https://docs.soliditylang.org/en/v0.5.3/types.html#arrays).
+
+#### Keyword.
+
+**memory** và **storage**: Giải thích memory và storage trong Solidity.
+Để dễ hiểu thì storage và solidity hoạt động tương tự như đĩa cứng và bộ nhớ RAM trên máy tính. Memory trong Solidity chỉ lưu trữ dữ liệu tạm thời, trong khi đó Storage có thể giữ dữ liệu qua các lần gọi hàm khác nhau. Contract có thể sử dụng bất kỳ lượng bộ nhớ nào trong suốt quá trình thực thi, nhưng mỗi khi dừng, thì Memory sẽ bị xóa sạch cho lần đến lần thực thi kế tiếp. Trong khi đó, Storage lưu trữ liên tục, nghĩ là Contract có thể truy cập dữ liệu đã lưu trữ từ trước ở bộ nhớ.
+
+Lưu ý: Gas sử  dụng cho Storage lớn hơn rất nhiều so với gas sử dụng Memory. Do đó, nên sử dụng memory để tính toán, cuối cùng lưu trữ kết quả cuối cùng trong Storage.
+
+1.Biến trạng thái(State variables), biến cục bộ (Local Variable) của struct, mảng mặc định luôn được lưu trữ trong storage.
+2.Function arguments là memory.
+3. Khi create một instance mới của một mảng bằng keyword 'memory',một bảng coppy của mảng đó được tạo ra. Khi thay đổi giá trị trên instance mới, thì không ảnh hưởng đến giá trị của instance gôc.
+
+Khi sử dụng một reference types(structs, arrays or mapping). Phải luôn cung cấp  rõ ràng vùng dữ liệu nơi mà chúng được lưu trữ:
+*memory: Thời gian sống(lưu trữ) giới hạn bởi 1 lần gọi hàm.
+*storage: Thời gian sống(lưu trữ) giới hạn bởi thời gian sống của contract.
+*calldata: là nơi đặt biệt chỉ chứa đối số của các hàm, chỉ có cho các externel functions.
+
+Giải thích keyword "memory" trong function constructor(string memory name, string memory symbol) trong Smart Contract BEP20.
+Giải thích: Phiên bản 0.5.0 trở về sau có thể string, byte cũng là kiểu reference, compiler yêu cầu hàm trả về string cần phải có data location là memory or calldata và hàm có arguments type string cần phải có keyword memory (đối với external functions thì có thể là keyword calldata). Storage không được vì arguments có lifetime bằng lifetime của chính function đó.
+
+**public**: tất cả đều có thể truy cập
+
+**private**: chỉ duy nhất contract tạo nó mới có thể truy cập được variable, function private.
+
+**external**: chỉ có thể access từ contract bên ngoài, không thể truy cập bên trong.
+
+**internal**: chỉ có thể access từ this contract và deriving contract. internal là default keywork của function.
+
+**view**: function có thể được view từ bên ngoài, có thể convert thành **non-payable** function.
+
+**non-payable**: function từ chối Ether send đến nó, **non-payable** không thể convert thành **payable** function.
+
+**payable**: function có thể gửi hoặc nhận Ether, nó cũng có thể là non-payable khi chấp nhận một payment là 0 Ether.
+
+**returns**: thông báo kiểu trả về của function.
+
+**event**: Tạo một event.
+
+**emit**: Emit một event đã được tạo từ keyword **event**.
+
+#### Modifier function
