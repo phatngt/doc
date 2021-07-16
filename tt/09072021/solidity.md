@@ -338,8 +338,8 @@ Có thể conversions from <span style="color:red"> address payable</span> to <s
 
 ## Solidity for MasterChef Smart Contract.
 ### Giới thiệu MasterChef
-**MasterChef**, có vai trò như tên gọi của nó, vua đầu bếp trên nền tàng **Ethereum**. Tưởng tượng **DeFi** project có một quầy bar cao cấp, có một **MasterChef** trình độ 3 sao michelin, đối diện ông ta là một cái bàn vòng, được chia ra nhiều khu vực, mỗi khu vực có 1 màu riêng biệt (**Pool**) nơi các **Staker** có thể ngồi và thưởng thức **Reward Token**. Chỉ cần các S*taker chọn một màu (**Pool**) và ngồi xuống,chấp nhận(**Approve**) cho **MasterChef** thò tay vào túi quần và  lấy ra Token (**stake**) có màu tương ứng(**Stake Token**), bỏ lên bàn, nơi **MasterChef** có thể thấy được (**MasterChef giữ staked token**). Qua tháng năm,
-các **Staker** sẽ được **MasterChef** phục vụ đồ ăn, đồ uống (Reward Token) liên tục miễn là có Token đã staked đến khi quầy bar đóng cửa(**Seed phase already completed**). Khi quầy bar đóng cửa, các **Staker** có thể lấy lại các Token mình đã bỏ ra(**withdraw**). À ngoài ra các **Staker** có thể chi thêm Token(**stake**) hoặc rút ra(**withdraw**) trong thời gian quầy bar hoạt động, mà nhớ phải ăn uống(**nhận Reward Token trong thời gian seeding pool**) trước khi stake hoặc withdraw nha.
+**MasterChef**, có vai trò như tên gọi của nó, vua đầu bếp trên nền tàng **Ethereum**. Tưởng tượng **DeFi** project có một quầy bar cao cấp, có một **MasterChef** trình độ 3 sao michelin, đối diện ông ta là một cái bàn vòng, được chia ra nhiều khu vực, mỗi khu vực có 1 màu riêng biệt (**Pool**) nơi các **Staker** có thể ngồi và thưởng thức **Reward Token**. Chỉ cần các **Staker** chọn một màu (**Pool**) và ngồi xuống,chấp nhận(**Approve**) cho **MasterChef** thò tay vào túi quần và  lấy ra Token (**stake**) có màu tương ứng(**Stake Token**), bỏ lên bàn, nơi **MasterChef** có thể thấy được (**MasterChef giữ staked token**). Qua tháng năm,
+các **Staker** sẽ được **MasterChef** phục vụ đồ ăn, đồ uống (**Reward Token**) liên tục miễn là có Token đã staked đến khi quầy bar đóng cửa(**Seed phase already completed**). Khi quầy bar đóng cửa, các **Staker** có thể lấy lại các Token mình đã bỏ ra(**withdraw**) và uống nốt đồ ăn/đồ uống còn thừa trên bàn(**claim reward**). À ngoài ra các **Staker** có thể chi thêm Token(**stake**) hoặc rút ra(**withdraw**) trong thời gian quầy bar hoạt động, mà nhớ phải ăn uống(**nhận Reward Token trong thời gian seeding pool**) trước khi stake hoặc withdraw nha.
 
 ### Những thứ cần có để tạo MasterChef Smart Contract.
 #### Cấu trúc của Smart Contract.
@@ -401,7 +401,7 @@ contract MasterChef{
 **memory** và **storage**: Giải thích memory và storage trong Solidity.
 Để dễ hiểu thì storage và solidity hoạt động tương tự như đĩa cứng và bộ nhớ RAM trên máy tính. Memory trong Solidity chỉ lưu trữ dữ liệu tạm thời, trong khi đó Storage có thể giữ dữ liệu qua các lần gọi hàm khác nhau. Contract có thể sử dụng bất kỳ lượng bộ nhớ nào trong suốt quá trình thực thi, nhưng mỗi khi dừng, thì Memory sẽ bị xóa sạch cho lần đến lần thực thi kế tiếp. Trong khi đó, Storage lưu trữ liên tục, nghĩ là Contract có thể truy cập dữ liệu đã lưu trữ từ trước ở bộ nhớ.
 
-Lưu ý: Gas sử  dụng cho Storage lớn hơn rất nhiều so với gas sử dụng Memory. Do đó, nên sử dụng memory để tính toán, cuối cùng lưu trữ kết quả cuối cùng trong Storage.
+Lưu ý: tuỳ vào loại state variable mà gas được sử dụng ở memory lớn hơn hoặc storage lớn hơn. More details: [See more](https://ethereum.stackexchange.com/posts/66413/revisions)
 
 1.Biến trạng thái(State variables), biến cục bộ (Local Variable) của struct, mảng mặc định luôn được lưu trữ trong storage.
 
@@ -421,7 +421,11 @@ Giải thích: Phiên bản 0.5.0 trở về sau có thể string, byte cũng l�
 
 **private**: chỉ duy nhất contract tạo nó mới có thể truy cập được variable, function private.
 
+<<<<<<< Updated upstream
 **external**: chỉ có thể access từ contract bên ngoài, không thể truy cập bên trong.
+=======
+**external**: chỉ có thể access từ contract bên ngoài, không thể truy cập bên trong theo cách bình thường. Có thể truy cập nó bằng keyword **this**.
+>>>>>>> Stashed changes
 ```solidity
 pragma solidity 0.6.12;
 
@@ -477,3 +481,98 @@ Result:
 **emit**: Emit một event đã được tạo từ keyword **event**.
 
 #### Modifier function
+
+Như đã giải thích khái niệm bên trên, modifier giống như format header cho nhiều hàm khác. Modifier function là unit, không có chuyện giống như code bên dưới :))
+```solidity
+pragma solidity 0.6.12;
+contract Demo   {
+
+    modifier geaterThanone(uint256 _number) {
+        require(_number > 1, "Error: Number not less or equal 1");
+        _;
+    }
+
+    modifier lessThanFive(uint256 _number) geaterThanone(_number) {
+
+        _;
+    }-
+
+    function callBlockTimestamp() public view returns (uint256){
+        return 1;
+    }
+}
+```
+Error:
+
+```bash
+contracts/Test.sol:9:44: ParserError: Expected '{' but got identifier modifier
+lessThanFive(uint256 _number) geaterThanone(_number) { ^-----------^
+```
+
+Làm sao để check được thứ tự của modifier khi 1 function sử dụng nhiều modifier.
+
+```solidity
+pragma solidity 0.6.12;
+contract Demo   {
+
+    modifier geaterThanOne(uint256 _number) {
+        require(_number > 1, "Error: Number not less or equal 1");
+        _;
+    }
+
+    modifier geaterThanFive(uint256 _number) {
+        require(_number > 5, "Error: Number not less or equal 5" )  ;
+        _;
+    }
+
+    function callNumber(uint256 _num)  geaterThanOne(_num) geaterThanFive(_num) public {
+
+    }
+}
+```
+
+Result khi gọi callNumber(2):
+```bash
+transact to Demo.callNumber errored: VM error: revert.
+
+revert
+	The transaction has been reverted to the initial state.
+Reason provided by the contract: "Error: Number not less or equal 5".
+Debug the transaction to get more information.
+```
+![Image result ](https://github.com/phatngt/doc/blob/main/tt/09072021/images/modifier_result1.png)
+
+
+```solidity
+pragma solidity 0.6.12;
+contract Demo   {
+
+    modifier geaterThanOne(uint256 _number) {
+        require(_number > 1, "Error: Number not less or equal 1");
+        _;
+    }
+
+    modifier geaterThanFive(uint256 _number) {
+        require(_number > 5, "Error: Number not less or equal 5" )  ;
+        _;
+    }
+
+    function callNumber(uint256 _num) geaterThanFive(_num) geaterThanOne(_num) public {
+
+    }
+}
+```
+
+Result khi gọi callNumber(0):
+```bash
+transact to Demo.callNumber errored: VM error: revert.
+
+revert
+	The transaction has been reverted to the initial state.
+Reason provided by the contract: "Error: Number not less or equal 5".
+Debug the transaction to get more information.
+transact to Demo.callNumber errored: Error encoding arguments: Error: invalid BigNumber string (argument="value", value="", code=INVALID_ARGUMENT, version=bignumber/5.1.1)
+```
+![Image result ](https://github.com/phatngt/doc/blob/main/tt/09072021/images/modifier_result2.png)
+
+#### Library (Có time thì viết tiếp :D)
