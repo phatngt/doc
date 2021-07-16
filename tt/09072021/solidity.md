@@ -460,7 +460,7 @@ contract Demo {
 ```
 
 Result:
-![Image result ](https://github.com/phatngt/doc/tt/09072021/images/internal_result.png)
+![Image result ](https://github.com/phatngt/doc/blob/main/tt/09072021/images/internal_result.png)
 
 
 **view**: function có thể được view từ bên ngoài, có thể convert thành **non-payable** function.
