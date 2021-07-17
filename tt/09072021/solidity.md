@@ -374,7 +374,25 @@ contract MasterChef{
 }
 ```
 
-**struct**: Giống như struct trong C, biến có kiểu này sẽ giữ thêm nhiều giá trị có kiểu có thể khác nhau bên trong nó. Vì struct là reference type, để lưu trữ giá trị có kiểu struct vào một biến, biến đó cần được khai báo có thêm keyword **storage** để biến đó lưu trữ dưới harddisk Để dễ hình dùng hãy xem đoạn code bên dứoi.
+**struct**: Giống như struct trong C, biến có kiểu này sẽ giữ thêm nhiều giá trị có kiểu có thể khác nhau bên trong nó. Để truy cập các biến con bên trong biến có kiểu struct, dùng **.** để truy cập. Example: 
+```solidity
+contract MasterChef{
+    struct UserInfo {
+        address userAddress,
+        uint256 amount,
+        uint256 rewardDebt
+    }
+
+    mapping(uint8=> mapping(address => UserInfo) public userInfo;
+
+    function getUserInfo(uint8 _pid, address _user) public view returns (UserInfo){
+        UserInfo storage user = userInfo[_pid][_user];
+        uint256 userAmount = user.amount;
+        return user;
+    }
+}
+```
+ Vì struct là reference type, để lưu trữ giá trị có kiểu struct vào một biến, biến đó cần được khai báo có thêm keyword **storage** để biến đó lưu trữ dưới harddisk Để dễ hình dùng hãy xem đoạn code bên dứoi.
 
 ```solidity
 contract MasterChef{
@@ -393,15 +411,23 @@ contract MasterChef{
 }
 ```
 
+
 **array**: Giống như **struct** và **Data location**, cũng là reference type. Array có fixed size, size là k , kiêu là T => T[k] và dynamic size => T[]. Ngoài ra, có thể cấp phát bộ nhớ trong quá trình thực thi bằng keyword **new**. Array Literal, Array Members,
 [More details](https://docs.soliditylang.org/en/v0.5.3/types.html#arrays).
+
+Để truy cập array, dùng A[index] như các ngôn ngữ khác. 
+
+Demo check xem array mutable hay immutable.
 
 #### Keyword.
 
 **memory** và **storage**: Giải thích memory và storage trong Solidity.
 Để dễ hiểu thì storage và solidity hoạt động tương tự như đĩa cứng và bộ nhớ RAM trên máy tính. Memory trong Solidity chỉ lưu trữ dữ liệu tạm thời, trong khi đó Storage có thể giữ dữ liệu qua các lần gọi hàm khác nhau. Contract có thể sử dụng bất kỳ lượng bộ nhớ nào trong suốt quá trình thực thi, nhưng mỗi khi dừng, thì Memory sẽ bị xóa sạch cho lần đến lần thực thi kế tiếp. Trong khi đó, Storage lưu trữ liên tục, nghĩ là Contract có thể truy cập dữ liệu đã lưu trữ từ trước ở bộ nhớ.
 
-Lưu ý: tuỳ vào loại state variable mà gas được sử dụng ở memory lớn hơn hoặc storage lớn hơn. More details: [See more](https://ethereum.stackexchange.com/posts/66413/revisions)
+Lưu ý: Gas của memory sử dụng lớn hơn gas của storage sử dụng. Huy Sensei giúp em giải thích chổ này với nha.
+
+Storage được sử dụng như một object có thể chỉnh sửa được ở bên trong nó.
+Memory luôn clone ra một object mới, nên nó immutable.
 
 1.Biến trạng thái(State variables), biến cục bộ (Local Variable) của struct, mảng mặc định luôn được lưu trữ trong storage.
 
@@ -421,11 +447,7 @@ Giải thích: Phiên bản 0.5.0 trở về sau có thể string, byte cũng l�
 
 **private**: chỉ duy nhất contract tạo nó mới có thể truy cập được variable, function private.
 
-<<<<<<< Updated upstream
-**external**: chỉ có thể access từ contract bên ngoài, không thể truy cập bên trong.
-=======
 **external**: chỉ có thể access từ contract bên ngoài, không thể truy cập bên trong theo cách bình thường. Có thể truy cập nó bằng keyword **this**.
->>>>>>> Stashed changes
 ```solidity
 pragma solidity 0.6.12;
 
